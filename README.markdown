@@ -1,6 +1,6 @@
 # gosphinx
 
-[Go][Go] Clients and Connectors for [Sphinx][Sphinx].  
+[Go][Go] interface for [Sphinx][Sphinx] standalone full-text search engine.
 
 # Getting started:
 
@@ -8,7 +8,7 @@ To build and install gosphinx, from the root directory of the git clone:
 
 	make install
 
-## examples
+## Examples
 
 After installing gosphinx (per above), try (again from the root dir of gosphinx):
 
