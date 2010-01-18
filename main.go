@@ -14,8 +14,8 @@ func main() {
     if err != nil {
         fmt.Println("Error: ", err)
     } else {
-        for i := 0; i < len(status); i++ {
-            fmt.Printf("%20s  %s\n", status[i][0]+":", status[i][1])
+        for _, row := range status {
+            fmt.Printf("%20s  %s\n", row[0]+":", row[1])
         }
     }
 }
