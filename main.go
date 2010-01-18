@@ -15,7 +15,7 @@ func main() {
         fmt.Println("Error: ", err)
     } else {
         for i := 0; i < len(status); i++ {
-            fmt.Printf("%20s  %s\n", status[i][0] + ":", status[i][1])
+            fmt.Printf("%20s  %s\n", status[i][0]+":", status[i][1])
         }
     }
 }

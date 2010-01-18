@@ -262,26 +262,26 @@ func (client *Client) SetLimits(offset int, limit int, max int, cutoff int) *Cli
 func (self *Client) Status() ([][]string, os.Error) {
     body := make([]byte, 4)
     binary.BigEndian.PutUint32(body[0:4], 1)
-    
+
     rest, err := self.simpleQuery(searchdCommandStatus, verCommandStatus, len(body), body)
     if err != nil {
         return nil, err
     }
-    
+
     rows := binary.BigEndian.Uint32(rest[0:4])
     cols := binary.BigEndian.Uint32(rest[4:8])
     rest = rest[8:]
-    
+
     response := make([][]string, rows)
     for i := 0; i < int(rows); i++ {
         response[i] = make([]string, cols)
         for j := 0; j < int(cols); j++ {
             len := binary.BigEndian.Uint32(rest[0:4])
-            response[i][j] = bytes.NewBuffer(rest[4:4+len]).String()
+            response[i][j] = bytes.NewBuffer(rest[4 : 4+len]).String()
             rest = rest[4+len:]
         }
     }
-    
+
     return response, nil
 }
 
@@ -307,7 +307,7 @@ func (self *Client) connect() (*net.TCPConn, os.Error) {
         return nil, err
     }
     my_proto := binary.BigEndian.Uint32(ver_bits[0:4])
-    
+
     if my_proto < 1 {
         self.error = fmt.Sprintf("expected searchd protocol version 1+, got version %d", my_proto)
         return nil, SphinxError{os.ErrorString(self.error)}
@@ -321,18 +321,18 @@ func (self *Client) simpleQuery(command int, version int, size int, body []byte)
         return nil, err
     }
 
-    header := make([]byte, 8 + len(body))
+    header := make([]byte, 8+len(body))
     binary.BigEndian.PutUint16(header[0:2], uint16(command))
     binary.BigEndian.PutUint16(header[2:4], uint16(version))
     binary.BigEndian.PutUint32(header[4:8], uint32(size))
 
-	request := bytes.Add(header, body);
+    request := bytes.Add(header, body)
 
     _, err = conn.Write(request)
     if err != nil {
         return nil, err
     }
-    
+
     return self.getResponse(conn)
 }
 
@@ -342,7 +342,7 @@ func (self *Client) getResponse(conn *net.TCPConn) ([]byte, os.Error) {
     // ver := binary.BigEndian.Uint16(size_bits[2:4])
     size := binary.BigEndian.Uint32(size_bits[4:8])
     rest, _ := ioutil.ReadAll(io.LimitReader(conn, int64(size)))
-    
+
     switch status {
     case SearchdOk:
     case SearchdWarning:
